@@ -1,5 +1,62 @@
 # whiteboard
-A web-based digital whiteboard.
+
+# Whiteboard Monorepo
+
+This project uses a monorepo structure with NodeJS, NextJS for the web app, Nextra for documentation, and Cucumber.js for BDD testing.
+
+## Structure
+
+- `apps/web` — NextJS web application
+- `apps/docs` — Nextra documentation site
+- `apps/bdd` — Cucumber.js BDD test suite
+
+## Getting Started
+
+### Setup
+
+1. Install NodeJS (latest LTS)
+  ```bash
+  # Using Node Version Manager (nvm):
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  nvm install --lts
+  nvm use --lts
+  node -v   # Should show the latest LTS version
+  ```
+
+2. Install PNPM
+  ```bash
+  npm install pnpm
+  ```
+
+### Usage
+
+1. Install dependencies for all apps:
+  ```bash
+  pnpm install
+  ```
+
+2. Start the web app:
+  ```bash
+  npm run dev:web
+  ```
+
+3. Start the docs app:
+  ```bash
+  npm run dev:docs
+  ```
+
+4. Run BDD tests:
+  ```bash
+  npm run test:bdd
+  ```
+
+## Notes
+- All apps use the latest LTS releases.
+- Each app has its own `package.json` and dependencies.
+- Docs app uses Nextra with `nextra-theme-docs`.
+- BDD app uses Cucumber.js with feature and step definition folders.
 
 ## Constitution Guidance
 

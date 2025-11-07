@@ -1,0 +1,15 @@
+{
+  "name": "whiteboard",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "apps/web",
+    "apps/docs",
+    "apps/bdd"
+  ],
+  "scripts": {
+    "dev:web": "npm --workspace apps/web run dev",
+    "dev:docs": "npm --workspace apps/docs run dev",
+    "test:bdd": "npm --workspace apps/bdd run test"
+  }
+}
