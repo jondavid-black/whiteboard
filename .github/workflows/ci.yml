@@ -23,3 +23,39 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
+
+  web:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js (LTS)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+        working-directory: apps/web
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+        working-directory: apps/web
+
+      - name: Build (apps/web)
+        run: pnpm build
+        working-directory: apps/web
+
+      - name: Lint (apps/web)
+        run: pnpm lint
+        working-directory: apps/web
+
+      - name: Prettier Check (apps/web)
+        run: pnpm prettier
+        working-directory: apps/web
+
+      - name: Run Tests (apps/web)
+        run: pnpm test
+        working-directory: apps/web
