@@ -1,7 +1,7 @@
 # whiteboard
 A web-based digital whiteboard.
 
-## Constitution
+## Constitution Guidance
 
 This is a web-based digital whiteboard built with an emphasis on user experience, quality, security, and performance.
 We will implement our digital whiteboard using TypeScript within NodeJS on the NextJS framework.
@@ -21,6 +21,7 @@ We maintain security by minimizing the 3rd party dependencies and only using lib
 We maintain documentation for the tool using the Nextra documentation framework and Markdown files.
 We maintain our application and documentation in a monorepo using the following structure.
 
+```text
 /whiteboard
   |
   |-- /apps
@@ -60,6 +61,7 @@ We maintain our application and documentation in a monorepo using the following 
   |
   |-- package.json
   |-- pnpm-workspace.yaml
+```
 
 We use GitHub Actions to automate our CI/CD pipelines ensuring quality and security with every change to the code base.
 We will use GitHub's security settings on the repository with CodeQL and Depend-a-Bot scanning to eliminate vulnerabilities.
