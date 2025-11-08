@@ -2,15 +2,19 @@ import { render, screen } from '@testing-library/react';
 import Home from './page';
 
 describe('Landing Page', () => {
-  it('renders the MVP welcome message', () => {
+  it('renders the NavBar, SidePanel, and Canvas', () => {
     render(<Home />);
-    expect(screen.getByText('Welcome to the Whiteboard MVP')).toBeInTheDocument();
-    expect(screen.getByText(/initial landing page/i)).toBeInTheDocument();
+    // NavBar
+    expect(screen.getByLabelText('Main Navigation')).toBeInTheDocument();
+    // SidePanel hamburger button
+    expect(screen.getByRole('button', { name: /side panel/i })).toBeInTheDocument();
+    // Canvas
+    expect(screen.getByLabelText('Infinite Canvas')).toBeInTheDocument();
   });
 
   it('renders navigation links', () => {
     render(<Home />);
-    expect(screen.getByText('Home')).toBeInTheDocument();
-    expect(screen.getByText('About')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /home/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /about/i })).toBeInTheDocument();
   });
 });

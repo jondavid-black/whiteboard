@@ -1,0 +1,7 @@
+openapi: 3.0.0
+info:
+  title: UI Infinite Canvas API (UI-only, no backend)
+  version: 1.0.0
+paths: {}
+components: {}
+# Note: No backend endpoints required for initial UI-only implementation. Future scope may define API for canvas content persistence or collaboration.
