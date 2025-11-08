@@ -9,12 +9,12 @@ it('supports arrow key navigation and focus', () => {
   // Press ArrowLeft
   fireEvent.keyDown(toolbar, { key: 'ArrowLeft' });
   expect(onSelect).toHaveBeenCalledWith('hand');
-  // Press Home
+  // Press Home (should go to hand, now first)
   fireEvent.keyDown(toolbar, { key: 'Home' });
-  expect(onSelect).toHaveBeenCalledWith('rectangle');
-  // Press End
-  fireEvent.keyDown(toolbar, { key: 'End' });
   expect(onSelect).toHaveBeenCalledWith('hand');
+  // Press End (should go to eraser, now last)
+  fireEvent.keyDown(toolbar, { key: 'End' });
+  expect(onSelect).toHaveBeenCalledWith('eraser');
 });
 
 it('has correct ARIA roles and attributes', () => {

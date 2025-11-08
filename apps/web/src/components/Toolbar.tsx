@@ -8,12 +8,12 @@ import PanToolIcon from '@mui/icons-material/PanTool';
 import AutoFixOffIcon from '@mui/icons-material/AutoFixOff';
 
 const tools = [
+  { key: 'hand', icon: <PanToolIcon />, label: 'Pan/Zoom' },
   { key: 'rectangle', icon: <CropSquareIcon />, label: 'Rectangle' },
   { key: 'circle', icon: <RadioButtonUncheckedIcon />, label: 'Circle' },
   { key: 'line', icon: <ShowChartIcon />, label: 'Line' },
   { key: 'text', icon: <TextFieldsIcon />, label: 'Text' },
   { key: 'eraser', icon: <AutoFixOffIcon />, label: 'Eraser' },
-  { key: 'hand', icon: <PanToolIcon />, label: 'Pan/Zoom' },
 ];
 
 export type ToolKey = (typeof tools)[number]['key'];

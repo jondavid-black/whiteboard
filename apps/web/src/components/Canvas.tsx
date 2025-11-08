@@ -27,7 +27,7 @@ const Canvas: React.FC = () => {
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [shapes, setShapes] = useState<Shape[]>([]);
-  const [activeTool, setActiveTool] = useState<ToolKey>('rectangle');
+  const [activeTool, setActiveTool] = useState<ToolKey>('hand');
   const [drawing, setDrawing] = useState<
     | null
     | { type: 'rectangle' | 'circle' | 'line'; startX: number; startY: number }
@@ -69,7 +69,11 @@ const Canvas: React.FC = () => {
     };
     const onMouseUp = () => {
       dragging = false;
-      el.style.cursor = 'grab';
+      // Only set cursor to 'grab' if hand tool is active
+      if (activeTool === 'hand') {
+        el.style.cursor = 'grab';
+      }
+      // Otherwise, do not change cursor (remains crosshair for drawing tools)
     };
 
     // Touch events
@@ -123,7 +127,25 @@ const Canvas: React.FC = () => {
     el.addEventListener('touchmove', onTouchMove, { passive: false });
     el.addEventListener('touchend', onTouchEnd);
     el.addEventListener('wheel', onWheel, { passive: false });
-    el.style.cursor = activeTool === 'hand' ? 'grab' : 'crosshair';
+    // Use crosshair for drawing tools, hand for hand tool
+    if (activeTool === 'hand') {
+      // Only set cursor to hand for hand tool, otherwise always crosshair for drawing tools
+      if (activeTool === 'hand') {
+        el.style.cursor = 'grab';
+      } else {
+        el.style.cursor = 'crosshair';
+      }
+    } else if (
+      activeTool === 'rectangle' ||
+      activeTool === 'circle' ||
+      activeTool === 'line' ||
+      activeTool === 'text' ||
+      activeTool === 'eraser'
+    ) {
+      el.style.cursor = 'crosshair';
+    } else {
+      el.style.cursor = 'default';
+    }
 
     return () => {
       el.removeEventListener('mousedown', onMouseDown);
