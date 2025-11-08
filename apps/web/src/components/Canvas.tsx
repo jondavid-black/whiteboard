@@ -174,7 +174,29 @@ const Canvas: React.FC = () => {
     const rect = (e.target as HTMLDivElement).getBoundingClientRect();
     const x = (e.clientX - rect.left - pan.x) / zoom;
     const y = (e.clientY - rect.top - pan.y) / zoom;
-    if (drawing.type === 'rectangle' || drawing.type === 'circle' || drawing.type === 'line') {
+    if (drawing.type === 'rectangle' || drawing.type === 'circle') {
+      // Normalize to always use top-left as (x, y) and positive width/height
+      const x1 = drawing.startX;
+      const y1 = drawing.startY;
+      const x2 = x;
+      const y2 = y;
+      const left = Math.min(x1, x2);
+      const top = Math.min(y1, y2);
+      const width = Math.abs(x2 - x1);
+      const height = Math.abs(y2 - y1);
+      setShapes((prev) => [
+        ...prev,
+        {
+          id: `${drawing.type}-${Date.now()}`,
+          type: drawing.type,
+          x: left,
+          y: top,
+          w: width,
+          h: height,
+          color: defaultColor,
+        } as Shape,
+      ]);
+    } else if (drawing.type === 'line') {
       setShapes((prev) => [
         ...prev,
         {
@@ -302,6 +324,100 @@ const Canvas: React.FC = () => {
           pointerEvents: 'none',
         }}
       >
+        {/* Shape preview while drawing */}
+        {drawing &&
+          (drawing.type === 'rectangle' || drawing.type === 'circle' || drawing.type === 'line') &&
+          (() => {
+            const { startX, startY } = drawing;
+            // Use current mouse position from drawing state
+            let currX = startX,
+              currY = startY;
+            if ('x' in drawing && typeof drawing.x === 'number') currX = drawing.x;
+            if ('y' in drawing && typeof drawing.y === 'number') currY = drawing.y;
+            if (drawing.type === 'rectangle' || drawing.type === 'circle') {
+              // Normalize preview to always use top-left and positive width/height
+              const x1 = startX;
+              const y1 = startY;
+              const x2 = currX;
+              const y2 = currY;
+              const left = Math.min(x1, x2);
+              const top = Math.min(y1, y2);
+              const width = Math.abs(x2 - x1);
+              const height = Math.abs(y2 - y1);
+              if (drawing.type === 'rectangle') {
+                return (
+                  <div
+                    className="canvas-shape-preview"
+                    style={{
+                      position: 'absolute',
+                      left,
+                      top,
+                      width,
+                      height,
+                      border: '2px dashed #bbb',
+                      background: 'rgba(200,200,200,0.08)',
+                      pointerEvents: 'none',
+                      zIndex: 30,
+                    }}
+                    aria-label="Rectangle preview"
+                  />
+                );
+              } else {
+                // circle
+                return (
+                  <div
+                    className="canvas-shape-preview"
+                    style={{
+                      position: 'absolute',
+                      left,
+                      top,
+                      width,
+                      height,
+                      borderRadius: '50%',
+                      border: '2px dashed #bbb',
+                      background: 'rgba(200,200,200,0.08)',
+                      pointerEvents: 'none',
+                      zIndex: 30,
+                    }}
+                    aria-label="Circle preview"
+                  />
+                );
+              }
+            }
+            if (drawing.type === 'line') {
+              const x1 = startX;
+              const y1 = startY;
+              const x2 = currX;
+              const y2 = currY;
+              return (
+                <svg
+                  className="canvas-shape-preview"
+                  style={{
+                    position: 'absolute',
+                    left: Math.min(x1, x2),
+                    top: Math.min(y1, y2),
+                    pointerEvents: 'none',
+                    overflow: 'visible',
+                    zIndex: 30,
+                  }}
+                  width={Math.abs(x2 - x1)}
+                  height={Math.abs(y2 - y1)}
+                  aria-label="Line preview"
+                >
+                  <line
+                    x1={x1 < x2 ? 0 : Math.abs(x2 - x1)}
+                    y1={y1 < y2 ? 0 : Math.abs(y2 - y1)}
+                    x2={x1 < x2 ? Math.abs(x2 - x1) : 0}
+                    y2={y1 < y2 ? Math.abs(y2 - y1) : 0}
+                    stroke="#bbb"
+                    strokeDasharray="4 4"
+                    strokeWidth={2}
+                  />
+                </svg>
+              );
+            }
+            return null;
+          })()}
         {shapes.map((shape) => {
           if (shape.type === 'rectangle') {
             return (
