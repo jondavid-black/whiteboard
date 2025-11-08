@@ -346,100 +346,7 @@ const Canvas: React.FC = () => {
           pointerEvents: 'none',
         }}
       >
-        {/* Shape preview while drawing */}
-        {drawing &&
-          (drawing.type === 'rectangle' || drawing.type === 'circle' || drawing.type === 'line') &&
-          (() => {
-            const { startX, startY } = drawing;
-            // Use current mouse position from drawing state
-            let currX = startX,
-              currY = startY;
-            if ('x' in drawing && typeof drawing.x === 'number') currX = drawing.x;
-            if ('y' in drawing && typeof drawing.y === 'number') currY = drawing.y;
-            if (drawing.type === 'rectangle' || drawing.type === 'circle') {
-              // Normalize preview to always use top-left and positive width/height
-              const x1 = startX;
-              const y1 = startY;
-              const x2 = currX;
-              const y2 = currY;
-              const left = Math.min(x1, x2);
-              const top = Math.min(y1, y2);
-              const width = Math.abs(x2 - x1);
-              const height = Math.abs(y2 - y1);
-              if (drawing.type === 'rectangle') {
-                return (
-                  <div
-                    className="canvas-shape-preview"
-                    style={{
-                      position: 'absolute',
-                      left,
-                      top,
-                      width,
-                      height,
-                      border: '2px dashed #bbb',
-                      background: 'rgba(200,200,200,0.08)',
-                      pointerEvents: 'none',
-                      zIndex: 30,
-                    }}
-                    aria-label="Rectangle preview"
-                  />
-                );
-              } else {
-                // circle
-                return (
-                  <div
-                    className="canvas-shape-preview"
-                    style={{
-                      position: 'absolute',
-                      left,
-                      top,
-                      width,
-                      height,
-                      borderRadius: '50%',
-                      border: '2px dashed #bbb',
-                      background: 'rgba(200,200,200,0.08)',
-                      pointerEvents: 'none',
-                      zIndex: 30,
-                    }}
-                    aria-label="Circle preview"
-                  />
-                );
-              }
-            }
-            if (drawing.type === 'line') {
-              const x1 = startX;
-              const y1 = startY;
-              const x2 = currX;
-              const y2 = currY;
-              return (
-                <svg
-                  className="canvas-shape-preview"
-                  style={{
-                    position: 'absolute',
-                    left: Math.min(x1, x2),
-                    top: Math.min(y1, y2),
-                    pointerEvents: 'none',
-                    overflow: 'visible',
-                    zIndex: 30,
-                  }}
-                  width={Math.abs(x2 - x1)}
-                  height={Math.abs(y2 - y1)}
-                  aria-label="Line preview"
-                >
-                  <line
-                    x1={x1 < x2 ? 0 : Math.abs(x2 - x1)}
-                    y1={y1 < y2 ? 0 : Math.abs(y2 - y1)}
-                    x2={x1 < x2 ? Math.abs(x2 - x1) : 0}
-                    y2={y1 < y2 ? Math.abs(y2 - y1) : 0}
-                    stroke="#bbb"
-                    strokeDasharray="4 4"
-                    strokeWidth={2}
-                  />
-                </svg>
-              );
-            }
-            return null;
-          })()}
+        {/* ...existing code... */}
         {shapes.map((shape) => {
           if (shape.type === 'rectangle') {
             return (
@@ -459,8 +366,7 @@ const Canvas: React.FC = () => {
                 aria-label="Rectangle"
               />
             );
-          }
-          if (shape.type === 'circle') {
+          } else if (shape.type === 'circle') {
             return (
               <div
                 key={shape.id}
@@ -479,16 +385,17 @@ const Canvas: React.FC = () => {
                 aria-label="Circle"
               />
             );
-          }
-          if (shape.type === 'line') {
+          } else if (shape.type === 'line') {
+            // Always draw from (shape.x, shape.y) to (shape.x + shape.w, shape.y + shape.h)
+            // The SVG should be positioned at (shape.x, shape.y) and the line from (0,0) to (w,h)
             return (
               <svg
                 key={shape.id}
                 className="canvas-shape"
                 style={{
                   position: 'absolute',
-                  left: Math.min(shape.x, shape.x + shape.w),
-                  top: Math.min(shape.y, shape.y + shape.h),
+                  left: shape.x,
+                  top: shape.y,
                   pointerEvents: 'none',
                   overflow: 'visible',
                 }}
@@ -506,8 +413,7 @@ const Canvas: React.FC = () => {
                 />
               </svg>
             );
-          }
-          if (shape.type === 'text') {
+          } else if (shape.type === 'text' && 'text' in shape) {
             return (
               <div
                 key={shape.id}
@@ -529,28 +435,6 @@ const Canvas: React.FC = () => {
           }
           return null;
         })}
-
-        {/* Eraser selection box */}
-        {drawing &&
-          drawing.type === 'eraser' &&
-          typeof drawing.x === 'number' &&
-          typeof drawing.y === 'number' && (
-            <div
-              style={{
-                position: 'absolute',
-                left: Math.min(drawing.startX, drawing.x),
-                top: Math.min(drawing.startY, drawing.y),
-                width: Math.abs(drawing.x - drawing.startX),
-                height: Math.abs(drawing.y - drawing.startY),
-                border: '2px dashed #bbb',
-                background: 'rgba(200,200,200,0.08)',
-                pointerEvents: 'none',
-                zIndex: 20,
-              }}
-              aria-label="Eraser selection box"
-            />
-          )}
-
         {/* Text input for placing text */}
         {inputPos && (
           <input
