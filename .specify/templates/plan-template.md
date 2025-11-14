@@ -95,7 +95,7 @@ specs/[###-feature]/
   |
   |-- /apps
   |    |
-  |    |-- /web
+  |    |-- /web            <-- Your Nextra documentation site
   |    |    |-- /src
   |    |    |    |-- /components
   |    |    |    |    |-- Header.tsx

@@ -17,8 +17,51 @@ short-lived mitigation in the plan and a follow-up task to resolve the gap.
 ## Project Structure
 
 ```text
-src/
-tests/
+# Single project
+/whiteboard
+  |
+  |-- /apps
+  |    |
+  |    |-- /web             <-- Your NextJS whiteboard web application
+  |    |    |-- /src
+  |    |    |    |-- /components
+  |    |    |    |    |-- Header.tsx
+  |    |    |    |    |-- Header.test.tsx  <-- (Unit Test)
+  |    |    |-- vitest.config.ts
+  |    |    |-- next.config.js
+  |    |    |-- package.json
+  |    |
+  |    |-- /docs            <-- Your Nextra documentation site
+  |         |-- package.json
+  |         |-- next.config.js (configured for Nextra)
+  |         |-- /content
+  |              |-- _meta.json
+  |              |-- index.mdx
+  |              |-- getting-started.mdx
+  |    |
+  |    |-- /e2e                  <-- BDD/E2E Tests
+  |         |-- /features         <-- Your Gherkin .feature files
+  |         |    |-- whiteboard.feature
+  |         |
+  |         |-- /steps            <-- Your TypeScript step definitions
+  |         |    |-- whiteboard.steps.ts
+  |         |
+  |         |-- package.json      <-- Has Cucumber & Playwright deps
+  |         |-- cucumber.js       <-- Cucumber config
+  |         |-- playwright.config.ts  <-- Playwright config
+  |
+  |-- /packages
+  |    |-- /ui
+  |    |    |-- /src
+  |    |    |    |-- Button.tsx
+  |    |    |    |-- Button.test.tsx   <-- (Component Test)
+  |    |    |-- vitest.config.ts
+  |    |    |-- package.json
+  |    |
+  |    |-- /eslint-config
+  |
+  |-- package.json
+  |-- pnpm-workspace.yaml
 ```
 
 ## Commands
